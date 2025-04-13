@@ -1,3 +1,14 @@
+
+-- This SQL script creates a database schema for a bookstore application, including tables for books, authors, customers, orders, and more.
+-- Table: book
+CREATE DATABASE bookstore;
+USE bookstore;
+
+
+
+
+
+
 -- Table: cust_order
 -- Stores each order placed by a customer, including shipping method, status, and total amount
 CREATE TABLE cust_order (
