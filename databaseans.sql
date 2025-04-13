@@ -329,19 +329,32 @@ INSERT INTO CustomerAddress (customerID, addressID) VALUES
 
 
 
--- Table: shipping_method 
--- List of all available shipping methods (e.g., Express, Standard)
 CREATE TABLE shipping_method (
     shipping_method_id INT AUTO_INCREMENT PRIMARY KEY,
     method_name VARCHAR(100) NOT NULL
 );
 
--- Table: order_status
--- List of all possible statuses (e.g., Pending, Delivered, Cancelled)
+INSERT INTO shipping_method (method_name) VALUES
+('Standard Shipping'),
+('Express Shipping'),
+('Same-Day Delivery'),
+('Overnight Express'),
+('Pickup In-Store');
+
+
 CREATE TABLE order_status (
     order_status_id INT AUTO_INCREMENT PRIMARY KEY,
     status_name VARCHAR(50) NOT NULL
 );
+
+INSERT INTO order_status (status_name) VALUES
+('Pending'),
+('Processing'),
+('Shipped'),
+('Out for Delivery'),
+('Delivered'),
+('Cancelled');
+
 
 -- Table: cust_order
 -- Stores each order placed by a customer, including shipping method, status, and total amount
@@ -351,13 +364,19 @@ CREATE TABLE cust_order (
     order_date DATE NOT NULL,                               
     shipping_method_id INT NOT NULL,                        
     order_status_id INT NOT NULL,                           
+<<<<<<< HEAD
     total_amount DECIMAL(10,2) NOT NULL,                   
 
+=======
+    total_amount DECIMAL(10,2) NOT NULL CHECK (total_amount >= 0),
+	
+>>>>>>> 8b30de3e89fe5cd908b43ebb0715d393a6ad787d
     FOREIGN KEY (customer_id) REFERENCES customer(customer_id),
     FOREIGN KEY (shipping_method_id) REFERENCES shipping_method(shipping_method_id),
     FOREIGN KEY (order_status_id) REFERENCES order_status(order_status_id)
 );
 
+<<<<<<< HEAD
 -- Table: order_line
 -- Contains line items for each order, showing which books were purchased, how many, and at what price
  CREATE TABLE order_line (
@@ -366,11 +385,27 @@ CREATE TABLE cust_order (
     book_id INT NOT NULL,                                   
     quantity INT NOT NULL CHECK (quantity > 0),             
     price DECIMAL(10, 2) NOT NULL,                          
+=======
+INSERT INTO cust_order (customer_id, order_date, shipping_method_id, order_status_id, total_amount) VALUES
+(1, '2025-04-10', 1, 1, 45.99),
+(2, '2025-04-11', 2, 2, 22.50),
+(3, '2025-04-12', 4, 4, 15.75),
+(4, '2025-04-13', 3, 5, 65.00),
+(1, '2025-04-14', 5, 6, 12.99);
+
+CREATE TABLE order_line (
+    order_line_id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT NOT NULL,
+    book_id INT NOT NULL,
+    quantity INT NOT NULL CHECK (quantity > 0),
+    price DECIMAL(10, 2) NOT NULL CHECK (price >= 0),
+>>>>>>> 8b30de3e89fe5cd908b43ebb0715d393a6ad787d
 
     FOREIGN KEY (order_id) REFERENCES cust_order(order_id),
     FOREIGN KEY (book_id) REFERENCES book(book_id)
 );
 
+<<<<<<< HEAD
 -- Table: shipping_method 
 -- List of all shipping methods available
 CREATE TABLE shipping_method (
@@ -380,19 +415,56 @@ CREATE TABLE shipping_method (
 
 -- Table: order_history
 -- Tracks status changes for each order (order history)
+=======
+INSERT INTO order_line (order_id, book_id, quantity, price) VALUES
+(1, 1, 2, 12.99),    -- 2 copies of book 1
+(1, 3, 1, 20.01),    -- 1 copy of book 3
+(2, 2, 1, 22.50),
+(3, 4, 1, 15.75),
+(4, 1, 3, 38.97),
+(4, 2, 1, 26.03),
+(5, 3, 1, 12.99);
+
+>>>>>>> 8b30de3e89fe5cd908b43ebb0715d393a6ad787d
 CREATE TABLE order_history (
     history_id INT AUTO_INCREMENT PRIMARY KEY,
     order_id INT NOT NULL,
     status_id INT NOT NULL,
+<<<<<<< HEAD
     history_date DATE NOT NULL,
+=======
+    history_date DATE NOT NULL DEFAULT CURRENT_DATE,
+
+>>>>>>> 8b30de3e89fe5cd908b43ebb0715d393a6ad787d
     FOREIGN KEY (order_id) REFERENCES cust_order(order_id),
     FOREIGN KEY (status_id) REFERENCES order_status(order_status_id)
 );
 
+<<<<<<< HEAD
 -- Table: order_status
 -- List of all possible statuses (e.g., Pending, Delivered, Cancelled)
 CREATE TABLE order_status (
     order_status_id INT AUTO_INCREMENT PRIMARY KEY,
     status_name VARCHAR(50) NOT NULL
 );
+=======
+INSERT INTO order_history (order_id, status_id, history_date) VALUES
+(1, 1, '2025-04-10'),  -- Pending
+(1, 2, '2025-04-11'),  -- Processing
+(1, 3, '2025-04-12'),  -- Shipped
 
+(2, 1, '2025-04-11'),
+(2, 2, '2025-04-11'),
+>>>>>>> 8b30de3e89fe5cd908b43ebb0715d393a6ad787d
+
+(3, 1, '2025-04-12'),
+(3, 2, '2025-04-12'),
+(3, 4, '2025-04-13'),  -- Out for Delivery
+
+(4, 1, '2025-04-13'),
+(4, 2, '2025-04-13'),
+(4, 3, '2025-04-14'),
+(4, 5, '2025-04-14'),  -- Delivered
+
+(5, 1, '2025-04-14'),
+(5, 6, '2025-04-14');  -- Cancelled
