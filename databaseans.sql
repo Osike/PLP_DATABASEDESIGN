@@ -1,3 +1,17 @@
+-- Create a user for general book queries
+CREATE USER 'bookstore_user'@'%' IDENTIFIED BY '12345678NAOMI'; -- So onthis line we have made Naomi to be the bookstore user
+GRANT SELECT ON bookstore_db.book TO 'bookstore_user'@'%';
+GRANT SELECT ON bookstore_db.author TO 'bookstore_user'@'%';
+
+-- Create a user for order management
+CREATE USER 'order_manager'@'localhost' IDENTIFIED BY '12345678WAYNE'; -- So onthis line we have made Wayne to be the order manger
+GRANT SELECT, INSERT, UPDATE ON bookstore_db.cust_order TO 'order_manager'@'localhost';
+GRANT SELECT, INSERT, UPDATE ON bookstore_db.order_line TO 'order_manager'@'localhost';
+
+-- Create a user for administrative tasks
+CREATE USER 'bookstore_admin'@'localhost' IDENTIFIED BY '12345678SHAD'; -- So onthis line we have made Shadrack to be the admin
+GRANT ALL PRIVILEGES ON bookstore_db.* TO 'bookstore_admin'@'localhost';
+
 
 -- This SQL script creates a database schema for a bookstore application, including tables for books, authors, customers, orders, and more.
 -- Table: book
@@ -334,10 +348,10 @@ CREATE TABLE order_status (
 CREATE TABLE cust_order (
     order_id INT AUTO_INCREMENT PRIMARY KEY,                
     customer_id INT NOT NULL,                               
-    order_date DATE NOT NULL DEFAULT CURRENT_DATE,          
+    order_date DATE NOT NULL,                               
     shipping_method_id INT NOT NULL,                        
     order_status_id INT NOT NULL,                           
-    total_amount DECIMAL(10,2) NOT NULL CHECK (total_amount >= 0),                   
+    total_amount DECIMAL(10,2) NOT NULL,                   
 
     FOREIGN KEY (customer_id) REFERENCES customer(customer_id),
     FOREIGN KEY (shipping_method_id) REFERENCES shipping_method(shipping_method_id),
@@ -346,28 +360,39 @@ CREATE TABLE cust_order (
 
 -- Table: order_line
 -- Contains line items for each order, showing which books were purchased, how many, and at what price
-CREATE TABLE order_line (
+ CREATE TABLE order_line (
     order_line_id INT AUTO_INCREMENT PRIMARY KEY,           
     order_id INT NOT NULL,                                 
     book_id INT NOT NULL,                                   
     quantity INT NOT NULL CHECK (quantity > 0),             
-    price DECIMAL(10, 2) NOT NULL CHECK (price >= 0),                          
+    price DECIMAL(10, 2) NOT NULL,                          
 
     FOREIGN KEY (order_id) REFERENCES cust_order(order_id),
     FOREIGN KEY (book_id) REFERENCES book(book_id)
 );
 
+-- Table: shipping_method 
+-- List of all shipping methods available
+CREATE TABLE shipping_method (
+    shipping_method_id INT AUTO_INCREMENT PRIMARY KEY,
+    method_name VARCHAR(100) NOT NULL
+);
+
 -- Table: order_history
--- Tracks changes in the order's status over time (e.g., from Pending to Shipped)
+-- Tracks status changes for each order (order history)
 CREATE TABLE order_history (
     history_id INT AUTO_INCREMENT PRIMARY KEY,
     order_id INT NOT NULL,
     status_id INT NOT NULL,
-    history_date DATE NOT NULL DEFAULT CURRENT_DATE,
-    
+    history_date DATE NOT NULL,
     FOREIGN KEY (order_id) REFERENCES cust_order(order_id),
     FOREIGN KEY (status_id) REFERENCES order_status(order_status_id)
 );
 
-
+-- Table: order_status
+-- List of all possible statuses (e.g., Pending, Delivered, Cancelled)
+CREATE TABLE order_status (
+    order_status_id INT AUTO_INCREMENT PRIMARY KEY,
+    status_name VARCHAR(50) NOT NULL
+);
 
