@@ -406,15 +406,13 @@ INSERT INTO order_status (status_name) VALUES
 -- Table: cust_order
 -- Stores each order placed by a customer, including shipping method, status, and total amount
 CREATE TABLE cust_order (
-    order_id INT AUTO_INCREMENT PRIMARY KEY,                
-    customer_id INT NOT NULL,                               
-    order_date DATE NOT NULL,                               
-    shipping_method_id INT NOT NULL,                        
-    order_status_id INT NOT NULL,                           
-    total_amount DECIMAL(10,2) NOT NULL,                   
-
+    order_id INT AUTO_INCREMENT PRIMARY KEY,
+    customer_id INT NOT NULL,
+    order_date DATE NOT NULL,
+    shipping_method_id INT NOT NULL,
+    order_status_id INT NOT NULL,
     total_amount DECIMAL(10,2) NOT NULL CHECK (total_amount >= 0),
-	
+
     FOREIGN KEY (customer_id) REFERENCES customer(customer_id),
     FOREIGN KEY (shipping_method_id) REFERENCES shipping_method(shipping_method_id),
     FOREIGN KEY (order_status_id) REFERENCES order_status(order_status_id)
@@ -423,19 +421,6 @@ CREATE TABLE cust_order (
 -- Table: order_line
 -- Contains line items for each order, showing which books were purchased, how many, and at what price
  CREATE TABLE order_line (
-    order_line_id INT AUTO_INCREMENT PRIMARY KEY,           
-    order_id INT NOT NULL,                                 
-    book_id INT NOT NULL,                                   
-    quantity INT NOT NULL CHECK (quantity > 0),             
-    price DECIMAL(10, 2) NOT NULL,                          
-INSERT INTO cust_order (customer_id, order_date, shipping_method_id, order_status_id, total_amount) VALUES
-(1, '2025-04-10', 1, 1, 45.99),
-(2, '2025-04-11', 2, 2, 22.50),
-(3, '2025-04-12', 4, 4, 15.75),
-(4, '2025-04-13', 3, 5, 65.00),
-(1, '2025-04-14', 5, 6, 12.99);
-
-CREATE TABLE order_line (
     order_line_id INT AUTO_INCREMENT PRIMARY KEY,
     order_id INT NOT NULL,
     book_id INT NOT NULL,
@@ -445,6 +430,13 @@ CREATE TABLE order_line (
     FOREIGN KEY (order_id) REFERENCES cust_order(order_id),
     FOREIGN KEY (book_id) REFERENCES book(book_id)
 );
+
+INSERT INTO cust_order (customer_id, order_date, shipping_method_id, order_status_id, total_amount) VALUES
+(1, '2025-04-10', 1, 1, 45.99),
+(2, '2025-04-11', 2, 2, 22.50),
+(3, '2025-04-12', 4, 4, 15.75),
+(4, '2025-04-13', 3, 5, 65.00),
+(1, '2025-04-14', 5, 6, 12.99);
 
 -- Table: shipping_method 
 -- List of all shipping methods available
