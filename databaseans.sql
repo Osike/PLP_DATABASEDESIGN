@@ -61,6 +61,53 @@ CREATE TABLE book_language (
     
 );
 
+-- Inserting data INTO THE FIRST FIVE TABLES
+-- Insert data into book_language table
+INSERT INTO book_language (language) VALUES
+('English'),
+('Spanish'),
+('French'),
+('German'),
+('Japanese');
+
+-- Insert data into publisher table
+INSERT INTO publisher (name, address, phone) VALUES
+('Penguin Books', '123 Main St, New York', '123-456-7890'),
+('HarperCollins', '456 Oak Ave, London', '987-654-3210'),
+('Random House', '789 Pine Ln, Paris', '555-123-4567'),
+('Scholastic', '101 Elm Rd, Tokyo', '111-222-3333'),
+('OReilly Media', '202 Maple Dr, Sydney', '444-555-6666');
+
+-- Insert data into author table
+INSERT INTO author (first_name, last_name, birthdate, biography) VALUES
+('Jane', 'Austen', '1775-12-16', 'English novelist known for her social commentary.'),
+('Gabriel', 'Garcia Marquez', '1927-03-06', 'Colombian author and Nobel laureate.'),
+('Stephen', 'King', '1947-09-21', 'American horror and suspense writer.'),
+('Haruki', 'Murakami', '1949-01-12', 'Japanese writer known for his surreal and magical realism.'),
+('Chimamanda', 'Ngozi Adichie', '1977-09-15', 'Nigerian writer known for her novels and essays.');
+
+-- Insert data into book table
+INSERT INTO book (title, isbn, language_id, publisher_id, publication_date, price, stock_quantity) VALUES
+('Pride and Prejudice', '978-0141439518', 1, 1, '1813-01-28', 12.99, 50),
+('One Hundred Years of Solitude', '978-0061120097', 2, 2, '1967-05-30', 15.50, 30),
+('The Shining', '978-0385121675', 1, 3, '1977-01-28', 18.75, 20),
+('Kafka on the Shore', '978-4167911674', 5, 4, '2002-09-12', 22.00, 40),
+('Americanah', '978-0307455925', 1, 2, '2013-05-14', 16.25, 60);
+
+-- Insert data into book_author table
+INSERT INTO book_author (book_id, author_id) VALUES
+(1, 1),
+(2, 2),
+(3, 3),
+(4, 4),
+(5, 5);
+
+-- Insert data into book_author table (more authors to a book)
+INSERT INTO book_author (book_id, author_id) VALUES
+(3, 1), -- Stephen King and Jane Austen are co-authors of the shining, for example.
+(5,1); -- Chimamanda and Jane Austen are co-authors of Americanah, for example.
+
+
 -- Create Country Table
 CREATE TABLE Country (
   countryID INT PRIMARY KEY,
@@ -364,19 +411,15 @@ CREATE TABLE cust_order (
     order_date DATE NOT NULL,                               
     shipping_method_id INT NOT NULL,                        
     order_status_id INT NOT NULL,                           
-<<<<<<< HEAD
     total_amount DECIMAL(10,2) NOT NULL,                   
 
-=======
     total_amount DECIMAL(10,2) NOT NULL CHECK (total_amount >= 0),
 	
->>>>>>> 8b30de3e89fe5cd908b43ebb0715d393a6ad787d
     FOREIGN KEY (customer_id) REFERENCES customer(customer_id),
     FOREIGN KEY (shipping_method_id) REFERENCES shipping_method(shipping_method_id),
     FOREIGN KEY (order_status_id) REFERENCES order_status(order_status_id)
 );
 
-<<<<<<< HEAD
 -- Table: order_line
 -- Contains line items for each order, showing which books were purchased, how many, and at what price
  CREATE TABLE order_line (
@@ -385,7 +428,6 @@ CREATE TABLE cust_order (
     book_id INT NOT NULL,                                   
     quantity INT NOT NULL CHECK (quantity > 0),             
     price DECIMAL(10, 2) NOT NULL,                          
-=======
 INSERT INTO cust_order (customer_id, order_date, shipping_method_id, order_status_id, total_amount) VALUES
 (1, '2025-04-10', 1, 1, 45.99),
 (2, '2025-04-11', 2, 2, 22.50),
@@ -399,13 +441,11 @@ CREATE TABLE order_line (
     book_id INT NOT NULL,
     quantity INT NOT NULL CHECK (quantity > 0),
     price DECIMAL(10, 2) NOT NULL CHECK (price >= 0),
->>>>>>> 8b30de3e89fe5cd908b43ebb0715d393a6ad787d
 
     FOREIGN KEY (order_id) REFERENCES cust_order(order_id),
     FOREIGN KEY (book_id) REFERENCES book(book_id)
 );
 
-<<<<<<< HEAD
 -- Table: shipping_method 
 -- List of all shipping methods available
 CREATE TABLE shipping_method (
@@ -415,7 +455,6 @@ CREATE TABLE shipping_method (
 
 -- Table: order_history
 -- Tracks status changes for each order (order history)
-=======
 INSERT INTO order_line (order_id, book_id, quantity, price) VALUES
 (1, 1, 2, 12.99),    -- 2 copies of book 1
 (1, 3, 1, 20.01),    -- 1 copy of book 3
@@ -425,7 +464,6 @@ INSERT INTO order_line (order_id, book_id, quantity, price) VALUES
 (4, 2, 1, 26.03),
 (5, 3, 1, 12.99);
 
->>>>>>> 8b30de3e89fe5cd908b43ebb0715d393a6ad787d
 CREATE TABLE order_history (
     history_id INT AUTO_INCREMENT PRIMARY KEY,
     order_id INT NOT NULL,
