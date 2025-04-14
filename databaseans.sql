@@ -375,7 +375,6 @@ INSERT INTO CustomerAddress (customerID, addressID) VALUES
 (50, 9);
 
 
-
 CREATE TABLE shipping_method (
     shipping_method_id INT AUTO_INCREMENT PRIMARY KEY,
     method_name VARCHAR(100) NOT NULL
@@ -417,6 +416,13 @@ CREATE TABLE cust_order (
     FOREIGN KEY (shipping_method_id) REFERENCES shipping_method(shipping_method_id),
     FOREIGN KEY (order_status_id) REFERENCES order_status(order_status_id)
 );
+
+INSERT INTO order_line (order_id, book_id, quantity, price) VALUES
+(1, 10, 1, 15.99),
+(1, 12, 2, 15.00),
+(2, 11, 1, 22.50),
+(3, 13, 1, 15.75),
+(4, 14, 2, 32.50);
 
 -- Table: order_line
 -- Contains line items for each order, showing which books were purchased, how many, and at what price
